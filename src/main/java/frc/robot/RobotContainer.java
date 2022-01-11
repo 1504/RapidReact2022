@@ -7,10 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Drive.Cartesian;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -22,10 +20,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
   ///Subsystems
   private final Drivetrain m_drive = new Drivetrain();
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   //Commands
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  
 
   //Controllers
   private final Joystick _joystickOne = new Joystick(0); //Temp joysticks
@@ -33,7 +30,7 @@ public class RobotContainer {
 
   
   public RobotContainer() {
-    
+
     configureButtonBindings();
     m_drive.setDefaultCommand(new Cartesian(m_drive, () -> _joystickOne.getY(), () -> _joystickOne.getX(), () -> _joystickTwo.getX()));
 
@@ -55,6 +52,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return new Cartesian(m_drive, () -> 1f, () -> 1f, () -> 1f); //temp line; soon to be changed
   }
 }
