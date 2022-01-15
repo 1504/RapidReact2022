@@ -4,10 +4,17 @@
 
 package frc.robot.subsystems;
 
+//import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 
@@ -20,6 +27,17 @@ public class Drivetrain extends SubsystemBase {
 
   private final MecanumDrive _drive;
 
+  private final Translation2d k_front_left_location;
+  private final Translation2d k_front_right_location;
+  private final Translation2d k_back_right_location;
+  private final Translation2d k_back_left_location;
+
+  private final MecanumDriveKinematics _kinematics;
+
+  //private final Encoder 
+
+  //private final AHRS _gyro;
+
   public Drivetrain() {
     _front_left_motor = new CANSparkMax(DriveConstants.FRONT_LEFT, MotorType.kBrushless);
     _front_right_motor = new CANSparkMax(DriveConstants.FRONT_RIGHT, MotorType.kBrushless);
@@ -27,6 +45,20 @@ public class Drivetrain extends SubsystemBase {
     _back_left_motor = new CANSparkMax(DriveConstants.BACK_LEFT, MotorType.kBrushless);
 
     _drive = new MecanumDrive(_front_left_motor, _back_left_motor, _front_right_motor, _back_right_motor);
+
+    //Dummy numbers
+    k_front_left_location = new Translation2d(1, 1);
+    k_front_right_location = new Translation2d(1, 1);
+    k_back_right_location = new Translation2d(1, 1);
+    k_back_left_location = new Translation2d(1, 1);
+
+    _kinematics = new MecanumDriveKinematics(k_front_left_location, k_front_right_location, k_back_left_location, k_back_right_location);
+
+
+    //_gyro = new AHRS(SPI.Port.kMXP);
+
+    ShuffleboardTab m_tab = Shuffleboard.getTab("Main");
+    m_tab.add("Drive", _drive).withPosition(0, 0).withSize(3, 2);
   }
 
   public void cartesianDrive(double ySpeed, double xSpeed, double zRot) {
