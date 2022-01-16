@@ -36,6 +36,7 @@ public class Drivetrain extends SubsystemBase {
 
   //private final Encoder 
 
+  //TODO: finish added the gryo, you silly goose 🦢
   //private final AHRS _gyro;
 
   public Drivetrain() {
@@ -61,14 +62,36 @@ public class Drivetrain extends SubsystemBase {
     m_tab.add("Drive", _drive).withPosition(0, 0).withSize(3, 2);
   }
 
+  /**
+   * TODO:
+   * - add with values make it go in which direction.
+   * - ie if setting 1 as ySpeed add that to the comment saying 1 is for forward
+   * - do the same for xSpeed and zRot
+   */
+  /**
+   * The main method to drive the robot.
+   * @param ySpeed the robot speed in the y axis (front/back) values -1 to 1
+   * @param xSpeed the robot speed in the x axis (left/right) values -1 to 1
+   * @param zRot the robot turning speed values -1 to 1
+   */
   public void cartesianDrive(double ySpeed, double xSpeed, double zRot) {
     _drive.driveCartesian(ySpeed, xSpeed, zRot);
   }
 
+  /**
+   * The main method to drive the robot, but with field centric driving.
+   * @param ySpeed the robot speed in the y axis (front/back) values -1 to 1
+   * @param xSpeed the robot speed in the x axis (left/right) values -1 to 1
+   * @param zRot the robot turning speed values -1 to 1
+   * @param gyroAngle the value from the current gyro angle
+   */
   public void cartesianDrive(double ySpeed, double xSpeed, double zRot, double gyroAngle) {
     _drive.driveCartesian(ySpeed, xSpeed, zRot, gyroAngle);
   }
 
+  /**
+   * A simple method to stop the drive. Use in the end method in drive commnds.
+   */
   public void stopDrive() {
     _drive.stopMotor();
   }
