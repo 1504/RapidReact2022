@@ -17,16 +17,23 @@ import edu.wpi.first.math.geometry.Translation2d;
 public final class Constants {
 
     public final class DriveConstants {
-        public static final int FRONT_LEFT = 10;
-        public static final int BACK_LEFT = 11;
-        public static final int BACK_RIGHT = 12;
-        public static final int FRONT_RIGHT = 13;
+        public static final int FRONT_LEFT = 1;
+        public static final int BACK_LEFT = 3;
+        public static final int BACK_RIGHT = 4;
+        public static final int FRONT_RIGHT = 2;
 
         //public static final Translation2d FRONT_LEFT_LOCATION = new Translation2d(1, 1);
     }
     public final class IOConstants {
         public static final int LEFT_JOYSTICK = 0;
         public static final int RIGHT_JOYSTICK = 1;
+        public static final int SHOOT_CONTROLLER = 2;
+    }
+    public static final class ShootConstants {
+        public static final int TOP_SHOOTER = 20;
+        public static final int BOT_SHOOTER = 13;
+        public static final double TOP_VALUE = 1;
+        public static final double BOT_VALUE = 1;
     }
 
 }

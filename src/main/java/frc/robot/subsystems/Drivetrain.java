@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 //import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -27,6 +28,12 @@ public class Drivetrain extends SubsystemBase {
   private final CANSparkMax _back_right_motor;
   private final CANSparkMax _back_left_motor;
 
+  //Encoders
+  private final RelativeEncoder _front_left_encoder;
+  private final RelativeEncoder _front_right_encoder;
+  private final RelativeEncoder _back_right_encoder;
+  private final RelativeEncoder _back_left_encoder;
+
   //Drivetrain
   private final MecanumDrive _drive;
 
@@ -38,9 +45,7 @@ public class Drivetrain extends SubsystemBase {
 
   //Kinematic drive for later
   private final MecanumDriveKinematics _kinematics;
-
-  //Encoders
-  private final Encoder fl_encoder;
+  
 
   //Gyro
   //private final AHRS _gyro;
@@ -65,21 +70,30 @@ public class Drivetrain extends SubsystemBase {
     _kinematics = new MecanumDriveKinematics(k_front_left_location, k_front_right_location, k_back_left_location, k_back_right_location);
 
     //Encoder stuff
-    fl_encoder = new Encoder(0, 1);
-    /*
-    fl_encoder.setSamplesToAverage(5);
-    fl_encoder.setDistancePerPulse(1.0 / 360.0 * 2.0 * Math.PI * 1.5);
-    fl_encoder.setMinRate(1.0);
-    */
+    _front_left_encoder = _front_left_motor.getEncoder();
+    _front_right_encoder = _front_right_motor.getEncoder();
+    _back_left_encoder = _back_left_motor.getEncoder();
+    _back_right_encoder = _back_right_motor.getEncoder();
     
 
     //_gyro = new AHRS(SPI.Port.kMXP);
 
     //Shuffleboard stuff
-    m_tab.add("Drive", _drive).withPosition(0, 0).withSize(3, 2);
-    //ShuffleboardLayout encoders = m_tab.getLayout("List Layout", "Encoders").withPosition(3, 1).withSize(2, 2);
-    //encoders.add("Left Encoder", fl_encoder);
-    m_tab.add("Encoders", fl_encoder).withPosition(3, 1).withSize(2,2);
+    m_tab.add("Drive", _drive)
+      .withPosition(1, 0)
+      .withSize(4, 2);
+    m_tab.add("Front Left", _front_left_encoder.getVelocity())
+      .withPosition(0, 0)
+      .withSize(1, 1);
+    m_tab.add("Back Left", _back_left_encoder.getVelocity())
+      .withPosition(0, 1)
+      .withSize(1, 1);
+    m_tab.add("Front Right", _front_right_encoder.getVelocity())
+      .withPosition(5, 0)
+      .withSize(1, 1);
+    m_tab.add("Back Right", _back_right_encoder.getVelocity())
+      .withPosition(5, 1)
+      .withSize(1, 1);
   }
 
   public void cartesianDrive(double ySpeed, double xSpeed, double zRot) {
