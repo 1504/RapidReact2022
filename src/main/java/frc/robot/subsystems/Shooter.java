@@ -11,6 +11,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants.ShootConstants;
 import frc.robot.Utils.Utils;
+import frc.robot.Utils.Presets;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -21,6 +22,11 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class Shooter extends SubsystemBase {
+
+  private Presets _preset;
+
+  private boolean _t;
+
   /*
   private final CANSparkMax _top_shooter;
   private final CANSparkMax _bottom_shooter;
@@ -47,6 +53,8 @@ public class Shooter extends SubsystemBase {
     .withWidget(BuiltInWidgets.kNumberSlider)
     .withProperties(Map.of("min", -1, "max", 1))
     .getEntry();
+  //private NetworkTableEntry _preset_chooser = m_tab.add("Shooter Presets", Presets.kMain)
+    //.getEntry();
 
 
   public Shooter() {
@@ -55,6 +63,10 @@ public class Shooter extends SubsystemBase {
 
     _top_shooter = new WPI_TalonSRX(ShootConstants.TOP_SHOOTER);
     _bottom_shooter = new WPI_TalonSRX(ShootConstants.BOT_SHOOTER);
+
+    _preset = Presets.kMain;
+    //maybe have testing enabled by controller. Will make it easier for builders
+    _t = ShootConstants.TESTING;
 
     //_top_encoder = _top_shooter.getEncoder();
     //_bottom_encoder = _bottom_shooter.getEncoder();
@@ -68,8 +80,15 @@ public class Shooter extends SubsystemBase {
   }
 
   public void shoot() {
-    double _t_s = _top_speed.getDouble(1.0);
-    double _b_s = _bot_speed.getDouble(1.0);
+    double _t_s;
+    double _b_s;
+    if (_t) {
+      _t_s = _top_speed.getDouble(1.0);
+      _b_s = _bot_speed.getDouble(1.0);
+    } else {
+      _t_s = _preset.topVal;
+      _b_s = _preset.botVal;
+    }
     _top_shooter.set(_t_s);
     _bottom_shooter.set(_b_s);
 

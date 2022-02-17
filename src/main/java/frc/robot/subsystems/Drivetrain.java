@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 //import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -45,8 +46,15 @@ public class Drivetrain extends SubsystemBase {
 
   //Kinematic drive for later
   private final MecanumDriveKinematics _kinematics;
-  
 
+  //PID drive
+  /*
+  private final SparkMaxPIDController fl_pid_controller;
+  private final SparkMaxPIDController fr_pid_controller;
+  private final SparkMaxPIDController br_pid_controller;
+  private final SparkMaxPIDController bl_pid_controller;
+*/
+  private double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
   //Gyro
   //private final AHRS _gyro;
 
@@ -78,6 +86,26 @@ public class Drivetrain extends SubsystemBase {
 
     //_gyro = new AHRS(SPI.Port.kMXP);
 
+    //PID defining
+    /*
+    fl_pid_controller = _front_left_motor.getPIDController();
+    fl_pid_controller.setFeedbackDevice(_front_left_encoder);
+    fr_pid_controller = _front_right_motor.getPIDController();
+    fr_pid_controller.setFeedbackDevice(_front_right_encoder);
+    bl_pid_controller = _back_left_motor.getPIDController();
+    bl_pid_controller.setFeedbackDevice(_back_left_encoder);
+    br_pid_controller = _back_right_motor.getPIDController();
+    br_pid_controller.setFeedbackDevice(_back_right_encoder);
+    */
+
+    kP = 0.1; 
+    kI = 1e-4;
+    kD = 1; 
+    kIz = 0; 
+    kFF = 0; 
+    kMaxOutput = 1; 
+    kMinOutput = -1;
+
     //Shuffleboard stuff
     m_tab.add("Drive", _drive)
       .withPosition(1, 0)
@@ -107,7 +135,6 @@ public class Drivetrain extends SubsystemBase {
   public void stopDrive() {
     _drive.stopMotor();
   }
-
 
   @Override
   public void periodic() {

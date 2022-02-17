@@ -28,12 +28,16 @@ public final class Constants {
         public static final int LEFT_JOYSTICK = 0;
         public static final int RIGHT_JOYSTICK = 1;
         public static final int SHOOT_CONTROLLER = 2;
+
+        public static final int LED_PORT = 6;
     }
     public static final class ShootConstants {
         public static final int TOP_SHOOTER = 20;
         public static final int BOT_SHOOTER = 13;
         public static final double TOP_VALUE = 1;
         public static final double BOT_VALUE = 1;
+
+        public static final boolean TESTING = false;
     }
 
 }

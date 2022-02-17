@@ -62,6 +62,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new Cartesian(m_drive, () -> 1f, () -> 1f, () -> 1f); //temp line; soon to be changed
+    return new Cartesian(m_drive, () -> 1f, () -> 0, () -> 0); //temp line; soon to be changed
   }
 }
