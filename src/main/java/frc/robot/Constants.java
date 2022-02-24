@@ -36,6 +36,7 @@ public final class Constants {
         public static final int BOT_SHOOTER = 13;
         public static final double TOP_VALUE = 1;
         public static final double BOT_VALUE = 1;
+        public static final int ELEVATOR_PORT = 14;
 
         public static final boolean TESTING = false;
     }
