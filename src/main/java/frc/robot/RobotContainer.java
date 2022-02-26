@@ -9,13 +9,16 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.IOConstants;
 import frc.robot.Constants.ShootConstants;
+import frc.robot.commands.Auton.AutonPhaseGroup;
 import frc.robot.commands.Drive.Cartesian;
 import frc.robot.commands.Shooter.DriveBall;
 import frc.robot.commands.Shooter.PIDPewPew;
 import frc.robot.commands.Shooter.PewPew;
+import frc.robot.commands.Winch.WinchPull;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.PIDShooter;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Winch;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -30,6 +33,7 @@ public class RobotContainer {
   private final Drivetrain m_drive = new Drivetrain();
   //private final Shooter m_shoot = new Shooter();
   private final PIDShooter p_shoot = new PIDShooter();
+  private final Winch m_winch = new Winch();
 
   //Commands
 
@@ -44,6 +48,7 @@ public class RobotContainer {
 
     configureButtonBindings();
     m_drive.setDefaultCommand(new Cartesian(m_drive, () -> _joystickOne.getY(), () -> _joystickOne.getX(), () -> _joystickTwo.getX()));
+    m_winch.setDefaultCommand(new WinchPull(m_winch, () -> _shootController.getLeftY()));
     //m_shoot.setDefaultCommand(new PewPew(m_shoot, _shooter.getY(), _shooter.getY()));
 
   }
@@ -67,6 +72,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new Cartesian(m_drive, () -> 1f, () -> 0, () -> 0); //temp line; soon to be changed
+    return new AutonPhaseGroup(m_drive, p_shoot); //temp line; soon to be changed
   }
 }

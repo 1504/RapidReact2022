@@ -40,5 +40,9 @@ public final class Constants {
 
         public static final boolean TESTING = false;
     }
+    public static final class WinchConstants {
+        public static final int RIGHT_WINCH = 17;
+        public static final int LEFT_WINCH = 16;
+    }
 
 }
