@@ -82,8 +82,8 @@ public class PIDShooter extends PIDSubsystem {
   }
 
   public void rawShoot() {
-    _top_shooter.set(.1);
-    _bottom_shooter.set(-.1);
+    _top_shooter.set(.63);
+    _bottom_shooter.set(.83);
   }
 
   public void stopShoot() {
