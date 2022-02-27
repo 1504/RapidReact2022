@@ -19,7 +19,8 @@ public class PIDPewPew extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    _shoot.rawShoot();
+    _shoot.setBot();
+    _shoot.setTop();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,6 +32,8 @@ public class PIDPewPew extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    _shoot.setBot(0);
+    _shoot.setTop(0);
     _shoot.stopShoot();
   }
 

@@ -17,6 +17,7 @@ import frc.robot.commands.Shooter.PewPew;
 import frc.robot.commands.Winch.WinchPull;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.PIDShooter;
+import frc.robot.subsystems.PIDShooterBad;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Winch;
 import edu.wpi.first.wpilibj2.command.Command;
