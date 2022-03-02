@@ -10,6 +10,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -43,6 +44,8 @@ public class PIDShooter extends SubsystemBase {
 
   double _t_s;
   double _b_s;
+
+  private static final SimpleMotorFeedforward _feedforward = new SimpleMotorFeedforward(0, 0);
 
   public PIDShooter() {
     _top_shooter = new CANSparkMax(ShootConstants.TOP_SHOOTER, MotorType.kBrushless);
@@ -89,30 +92,55 @@ public class PIDShooter extends SubsystemBase {
 
   }
 
+  /**
+   * Gets the rpm of the bottom shooter
+   * @return The rpm of the bottom shooter
+   */
   public double getBotRPM() {
     return (_bottom_encoder.getVelocity());
   }
 
+  /**
+   * Gets the rpm of the top shooter
+   * @return The rpm of the top shooter
+   */
   public double getTopRPM() {
     return (_top_encoder.getVelocity());
   }
 
+  /**
+   * Sets top shooter target rpm to val
+   * @param val Target rpm
+   */
   public void setTop(double val) {
     _PID_top.setSetpoint(val);
   }
+  /**
+   * Sets top shooter target speed to whatever is on shuffleboard
+   */
   public void setTop() {
     _PID_top.setSetpoint(_t_s);
   }
 
+  /**
+   * Sets bottom shooter target rpm to val
+   * @param val Target rpm
+   */
   public void setBot(double val) {
     _PID_bot.setSetpoint(val);
   }
+  /**
+   * Sets bottom shooter target speed to whatever is on shuffleboard
+   */
   public void setBot() {
     _PID_bot.setSetpoint(_b_s);
   }
 
+  /**
+   * Method to drive the ball into the shooter
+   */
   public void driveBall() {
-    _elevator.set(0.1);
+    _elevator.set(0.3);
   }
 
   public void stopBall() {
@@ -139,10 +167,14 @@ public class PIDShooter extends SubsystemBase {
     _t_s = setpointTop.getDouble(0);
     _b_s = setpointBot.getDouble(0);
 
+    System.out.println(_t_s);
+
     double top_out = _PID_top.calculate(getTopRPM());
-    _top_shooter.set(top_out);
+    //_top_shooter.set(top_out);
+    _top_shooter.setVoltage(top_out);
     double bot_out = _PID_bot.calculate(getBotRPM());
-    _bottom_shooter.set(bot_out);
+    //_bottom_shooter.set(bot_out);
+    _bottom_shooter.setVoltage(bot_out);
 
   }
 }

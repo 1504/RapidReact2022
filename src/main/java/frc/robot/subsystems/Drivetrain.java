@@ -124,14 +124,29 @@ public class Drivetrain extends SubsystemBase {
       .withSize(1, 1);
   }
 
+  /**
+   * main method to drive the robot
+   * @param ySpeed The robot speed in the y axis (front/back) values from -1 to 1
+   * @param xSpeed The robot speed in the x axis (left/right) values from -1 to 1
+   * @param zRot The robot rotation speed values from -1 to 1
+   */
   public void cartesianDrive(double ySpeed, double xSpeed, double zRot) {
     _drive.driveCartesian(ySpeed, xSpeed, zRot);
   }
-
+  /**
+   * main method to drive the robot with gyro
+   * @param ySpeed The robot speed in the y axis (front/back) values from -1 to 1
+   * @param xSpeed The robot speed in the x axis (left/right) values from -1 to 1
+   * @param zRot The robot rotation speed values from -1 to 1
+   * @param gyroAngle the gyro angle
+   */
   public void cartesianDrive(double ySpeed, double xSpeed, double zRot, double gyroAngle) {
     _drive.driveCartesian(ySpeed, xSpeed, zRot, gyroAngle);
   }
 
+  /**
+   * Method to stop driving
+   */
   public void stopDrive() {
     _drive.stopMotor();
   }
