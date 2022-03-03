@@ -39,6 +39,13 @@ public final class Constants {
         public static final int ELEVATOR_PORT = 41;
 
         public static final boolean TESTING = false;
+        public static final double TOP_KS = 0.08763;
+        public static final double TOP_KV = 0.1243;
+        public static final double BOT_KS = 0.062272;
+        public static final double BOT_KV = 0.1256;
+
+        public static final double TOP_kP = 0.001;
+        public static final double BOT_kP = 0.001;
     }
     public static final class WinchConstants {
         public static final int RIGHT_WINCH = 17;

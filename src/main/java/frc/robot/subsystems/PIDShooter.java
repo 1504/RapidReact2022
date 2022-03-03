@@ -45,7 +45,8 @@ public class PIDShooter extends SubsystemBase {
   double _t_s;
   double _b_s;
 
-  private static final SimpleMotorFeedforward _feedforward = new SimpleMotorFeedforward(0, 0);
+  private static final SimpleMotorFeedforward _feedforward_bot = new SimpleMotorFeedforward(ShootConstants.BOT_KS, ShootConstants.BOT_KV);
+  private static final SimpleMotorFeedforward _feedforward_top = new SimpleMotorFeedforward(ShootConstants.TOP_KS, ShootConstants.TOP_KV);
 
   public PIDShooter() {
     _top_shooter = new CANSparkMax(ShootConstants.TOP_SHOOTER, MotorType.kBrushless);
@@ -71,12 +72,12 @@ public class PIDShooter extends SubsystemBase {
       .withSize(3,3)
       .withWidget(BuiltInWidgets.kGraph)
       .getEntry();
-    setpointTop = s_tab.add("Top Shooter setpoint", 0)
+    setpointTop = s_tab.add("Top Shooter setpoint", 10)
       .withPosition(1, 3)
       .withSize(3, 1)
       .withWidget(BuiltInWidgets.kTextView)
       .getEntry();
-    setpointBot = s_tab.add("Bottom Shooter setpoint", 0)
+    setpointBot = s_tab.add("Bottom Shooter setpoint", 11)
       .withPosition(5, 3)
       .withSize(3, 1)
       .withWidget(BuiltInWidgets.kTextView)
@@ -89,7 +90,6 @@ public class PIDShooter extends SubsystemBase {
       .withSize(1,2);
 
 
-
   }
 
   /**
@@ -98,6 +98,7 @@ public class PIDShooter extends SubsystemBase {
    */
   public double getBotRPM() {
     return (_bottom_encoder.getVelocity());
+    
   }
 
   /**
@@ -113,13 +114,13 @@ public class PIDShooter extends SubsystemBase {
    * @param val Target rpm
    */
   public void setTop(double val) {
-    _PID_top.setSetpoint(val);
+    _PID_top.setSetpoint(val * 3.086);
   }
   /**
    * Sets top shooter target speed to whatever is on shuffleboard
    */
   public void setTop() {
-    _PID_top.setSetpoint(_t_s);
+    _PID_top.setSetpoint(_t_s * 3.086);
   }
 
   /**
@@ -127,13 +128,13 @@ public class PIDShooter extends SubsystemBase {
    * @param val Target rpm
    */
   public void setBot(double val) {
-    _PID_bot.setSetpoint(val);
+    _PID_bot.setSetpoint(val * 3.104);
   }
   /**
    * Sets bottom shooter target speed to whatever is on shuffleboard
    */
   public void setBot() {
-    _PID_bot.setSetpoint(_b_s);
+    _PID_bot.setSetpoint(_b_s * 3.104);
   }
 
   /**
@@ -164,15 +165,13 @@ public class PIDShooter extends SubsystemBase {
     rpmTop.setNumber(getTopRPM());
     rpmBot.setNumber(getBotRPM());
 
-    _t_s = setpointTop.getDouble(0);
-    _b_s = setpointBot.getDouble(0);
+    _t_s = setpointTop.getDouble(10);
+    _b_s = setpointBot.getDouble(11);
 
-    System.out.println(_t_s);
-
-    double top_out = _PID_top.calculate(getTopRPM());
+    double top_out = _PID_top.calculate(getTopRPM());// + _feedforward_top.calculate(getTopRPM());
     //_top_shooter.set(top_out);
     _top_shooter.setVoltage(top_out);
-    double bot_out = _PID_bot.calculate(getBotRPM());
+    double bot_out = _PID_bot.calculate(getBotRPM()); //+ _feedforward_bot.calculate(getBotRPM());
     //_bottom_shooter.set(bot_out);
     _bottom_shooter.setVoltage(bot_out);
 
