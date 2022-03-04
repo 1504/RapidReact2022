@@ -21,7 +21,6 @@ public final class Constants {
         public static final int BACK_LEFT = 3;
         public static final int BACK_RIGHT = 4;
         public static final int FRONT_RIGHT = 2;
-
         //public static final Translation2d FRONT_LEFT_LOCATION = new Translation2d(1, 1);
     }
     public final class IOConstants {
@@ -55,6 +54,11 @@ public final class Constants {
         public static final int LEFT_WINCH = 16;
 
         public static final int SOLOMON_PORT = 0;
+    }
+    public static final class BuildConstants {
+        public static final double WHEEL_TO_CENTER_SIDE_INCHES = 12.5; //From the side
+        public static final double WHEEL_TO_CENTER_FRONT_INCHES = 2.125; //From the front
+        public static final double INCHES_TO_METERS = 0.0254;
     }
 
 }

@@ -77,7 +77,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return new AutonPhaseGroup(m_drive, p_shoot); //temp line; soon to be changed
+    //Goes back 2 seconds, shoots for 2 seconds
+    return new AutonPhaseGroup(m_drive, p_shoot); 
   }
 }
