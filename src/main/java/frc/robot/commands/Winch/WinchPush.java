@@ -4,25 +4,22 @@
 
 package frc.robot.commands.Winch;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Winch;
 
-public class WinchPull extends CommandBase {
+public class WinchPush extends CommandBase {
   
   private final Winch _winch;
 
-  public WinchPull(Winch _w) {
+  public WinchPush(Winch _w) {
     _winch = _w;
-    //addRequirements(_w);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    _winch.extend();
+    _winch.contract();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

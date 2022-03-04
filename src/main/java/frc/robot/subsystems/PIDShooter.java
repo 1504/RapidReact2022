@@ -35,7 +35,10 @@ public class PIDShooter extends SubsystemBase {
 
   ShuffleboardTab s_tab = Shuffleboard.getTab("Shooter");
   NetworkTableEntry rpmTop;
+  NetworkTableEntry rpmTopText;
   NetworkTableEntry rpmBot;
+  NetworkTableEntry rpmBotText;
+
   NetworkTableEntry setpointTop;
   NetworkTableEntry setpointBot;
 
@@ -59,25 +62,34 @@ public class PIDShooter extends SubsystemBase {
 
     _bottom_shooter.setInverted(true);
 
-    _PID_bot = new PIDController(0, 0, 0);
-    _PID_top = new PIDController(0, 0, 0);
+    //I guess its just a P system
+    _PID_bot = new PIDController(ShootConstants.BOT_kP, 0, 0);
+    _PID_top = new PIDController(ShootConstants.TOP_kP, 0, 0);
 
-    rpmTop = s_tab.add("Top Shooter rpm", getTopRPM())
+    rpmTop = s_tab.add("Top Shooter RPM", getTopRPM())
       .withPosition(1,0)
       .withSize(3,3)
       .withWidget(BuiltInWidgets.kGraph)
       .getEntry();
-    rpmBot = s_tab.add("Bottom Shooter rpm", getBotRPM())
+    rpmTopText = s_tab.add("Top RPM", getTopRPM())
+      .withPosition(0, 2)
+      .withSize(1, 1)
+      .getEntry();
+    rpmBot = s_tab.add("Bottom Shooter RPM", getBotRPM())
       .withPosition(5,0)
       .withSize(3,3)
       .withWidget(BuiltInWidgets.kGraph)
       .getEntry();
-    setpointTop = s_tab.add("Top Shooter setpoint", 10)
+    rpmBotText = s_tab.add("Bottom RPM", getBotRPM())
+      .withPosition(4, 2)
+      .withSize(1, 1)
+      .getEntry();
+    setpointTop = s_tab.add("Top Shooter setpoint", 0)
       .withPosition(1, 3)
       .withSize(3, 1)
       .withWidget(BuiltInWidgets.kTextView)
       .getEntry();
-    setpointBot = s_tab.add("Bottom Shooter setpoint", 11)
+    setpointBot = s_tab.add("Bottom Shooter setpoint", 0)
       .withPosition(5, 3)
       .withSize(3, 1)
       .withWidget(BuiltInWidgets.kTextView)
@@ -159,14 +171,10 @@ public class PIDShooter extends SubsystemBase {
     _bottom_shooter.stopMotor();
   }
 
-
-  @Override
-  public void periodic() {
-    rpmTop.setNumber(getTopRPM());
-    rpmBot.setNumber(getBotRPM());
-
-    _t_s = setpointTop.getDouble(10);
-    _b_s = setpointBot.getDouble(11);
+  /**
+   * Calculates and sets the voltage on the motors
+   */
+  public void PIDLoop() {
 
     double top_out = _PID_top.calculate(getTopRPM());// + _feedforward_top.calculate(getTopRPM());
     //_top_shooter.set(top_out);
@@ -174,6 +182,18 @@ public class PIDShooter extends SubsystemBase {
     double bot_out = _PID_bot.calculate(getBotRPM()); //+ _feedforward_bot.calculate(getBotRPM());
     //_bottom_shooter.set(bot_out);
     _bottom_shooter.setVoltage(bot_out);
+  }
 
+  @Override
+  public void periodic() {
+    rpmTop.setNumber(getTopRPM());
+    rpmTopText.setNumber(getTopRPM());
+    rpmBot.setNumber(getBotRPM());
+    rpmBotText.setNumber(getBotRPM());
+
+    _t_s = setpointTop.getDouble(0);
+    _b_s = setpointBot.getDouble(0);
+
+    PIDLoop();
   }
 }

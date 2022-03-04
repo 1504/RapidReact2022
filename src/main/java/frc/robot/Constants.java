@@ -46,10 +46,15 @@ public final class Constants {
 
         public static final double TOP_kP = 0.001;
         public static final double BOT_kP = 0.001;
+
+        public static final double BOT_CONSTANT = 3.104;
+        public static final double TOP_CONSTANT = 3.086;
     }
     public static final class WinchConstants {
         public static final int RIGHT_WINCH = 17;
         public static final int LEFT_WINCH = 16;
+
+        public static final int SOLOMON_PORT = 0;
     }
 
 }

@@ -14,10 +14,11 @@ import frc.robot.commands.Drive.Cartesian;
 import frc.robot.commands.Shooter.DriveBall;
 import frc.robot.commands.Shooter.PIDPewPew;
 import frc.robot.commands.Shooter.PewPew;
+import frc.robot.commands.Winch.ToggleSolomon;
 import frc.robot.commands.Winch.WinchPull;
+import frc.robot.commands.Winch.WinchPush;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.PIDShooter;
-import frc.robot.subsystems.PIDShooterBad;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Winch;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,6 +35,7 @@ public class RobotContainer {
   private final Drivetrain m_drive = new Drivetrain();
   //private final Shooter m_shoot = new Shooter();
   private final PIDShooter p_shoot = new PIDShooter();
+  //Implement PID winch maybe
   private final Winch m_winch = new Winch();
 
   //Commands
@@ -49,7 +51,7 @@ public class RobotContainer {
 
     configureButtonBindings();
     m_drive.setDefaultCommand(new Cartesian(m_drive, () -> _joystickOne.getY(), () -> _joystickOne.getX(), () -> _joystickTwo.getX()));
-    m_winch.setDefaultCommand(new WinchPull(m_winch, () -> _shootController.getLeftY()));
+    //m_winch.setDefaultCommand(new WinchPull(m_winch, () -> _shootController.getLeftY()));
     //m_shoot.setDefaultCommand(new PewPew(m_shoot, _shooter.getY(), _shooter.getY()));
 
   }
@@ -64,6 +66,9 @@ public class RobotContainer {
     //new JoystickButton(_shootController, XboxController.Button.kX.value).whenHeld(new PewPew(m_shoot));
     new JoystickButton(_shootController, XboxController.Button.kX.value).whenHeld(new PIDPewPew(p_shoot));
     new JoystickButton(_shootController, XboxController.Button.kY.value).whenHeld(new DriveBall(p_shoot));
+    new JoystickButton(_shootController, XboxController.Button.kA.value).whenHeld(new WinchPull(m_winch));
+    new JoystickButton(_shootController, XboxController.Button.kB.value).whenHeld(new WinchPush(m_winch));
+    new JoystickButton(_shootController, XboxController.Button.kStart.value).whenPressed(new ToggleSolomon(m_winch));
   }
 
   /**
