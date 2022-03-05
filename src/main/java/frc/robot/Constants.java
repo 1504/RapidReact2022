@@ -17,10 +17,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 public final class Constants {
 
     public final class DriveConstants {
-        public static final int FRONT_LEFT = 1;
-        public static final int BACK_LEFT = 3;
-        public static final int BACK_RIGHT = 4;
-        public static final int FRONT_RIGHT = 2;
+        public static final int FRONT_LEFT = 15; //14
+        public static final int BACK_LEFT = 14; //15
+        public static final int BACK_RIGHT = 13; //12
+        public static final int FRONT_RIGHT = 12; //13
         //public static final Translation2d FRONT_LEFT_LOCATION = new Translation2d(1, 1);
     }
     public final class IOConstants {
@@ -31,11 +31,11 @@ public final class Constants {
         public static final int LED_PORT = 6;
     }
     public static final class ShootConstants {
-        public static final int TOP_SHOOTER = 14;
-        public static final int BOT_SHOOTER = 13;
+        public static final int TOP_SHOOTER = 3;
+        public static final int BOT_SHOOTER = 2;
         public static final double TOP_VALUE = 1;
         public static final double BOT_VALUE = 1;
-        public static final int ELEVATOR_PORT = 41;
+        public static final int ELEVATOR_PORT = 40;
 
         public static final boolean TESTING = false;
         public static final double TOP_KS = 0.08763;
@@ -50,8 +50,8 @@ public final class Constants {
         public static final double TOP_CONSTANT = 3.086;
     }
     public static final class WinchConstants {
-        public static final int RIGHT_WINCH = 17;
-        public static final int LEFT_WINCH = 16;
+        public static final int RIGHT_WINCH = 1;
+        public static final int LEFT_WINCH = 4;
 
         public static final int SOLOMON_PORT = 0;
     }
@@ -59,6 +59,9 @@ public final class Constants {
         public static final double WHEEL_TO_CENTER_SIDE_INCHES = 12.5; //From the side
         public static final double WHEEL_TO_CENTER_FRONT_INCHES = 2.125; //From the front
         public static final double INCHES_TO_METERS = 0.0254;
+    }
+    public static final class Misc {
+        public static final int BACK_MOTOR = 41;
     }
 
 }

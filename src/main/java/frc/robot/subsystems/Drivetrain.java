@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 //import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -12,6 +13,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
@@ -20,6 +22,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.Misc;
 
 public class Drivetrain extends SubsystemBase {
   
@@ -44,6 +47,8 @@ public class Drivetrain extends SubsystemBase {
   private final Translation2d k_back_right_location;
   private final Translation2d k_back_left_location;
 
+  private final WPI_TalonSRX _back_motor;
+
   //Kinematic drive for later
   private final MecanumDriveKinematics _kinematics;
 
@@ -60,12 +65,19 @@ public class Drivetrain extends SubsystemBase {
 
   //Shuffleboard tab
   ShuffleboardTab m_tab = Shuffleboard.getTab("Main");
+  NetworkTableEntry top_left;
+  NetworkTableEntry top_right;
+  NetworkTableEntry bot_left;
+  NetworkTableEntry bot_right;
+
 
   public Drivetrain() {
     _front_left_motor = new CANSparkMax(DriveConstants.FRONT_LEFT, MotorType.kBrushless);
     _front_right_motor = new CANSparkMax(DriveConstants.FRONT_RIGHT, MotorType.kBrushless);
     _back_right_motor = new CANSparkMax(DriveConstants.BACK_RIGHT, MotorType.kBrushless);
     _back_left_motor = new CANSparkMax(DriveConstants.BACK_LEFT, MotorType.kBrushless);
+
+    _back_motor = new WPI_TalonSRX(Misc.BACK_MOTOR);
 
     _drive = new MecanumDrive(_front_left_motor, _back_left_motor, _front_right_motor, _back_right_motor);
 
@@ -98,30 +110,23 @@ public class Drivetrain extends SubsystemBase {
     br_pid_controller.setFeedbackDevice(_back_right_encoder);
     */
 
-    kP = 0.1; 
-    kI = 1e-4;
-    kD = 1; 
-    kIz = 0; 
-    kFF = 0; 
-    kMaxOutput = 1; 
-    kMinOutput = -1;
-
     //Shuffleboard stuff
-    m_tab.add("Drive", _drive)
-      .withPosition(1, 0)
-      .withSize(4, 2);
-    m_tab.add("Front Left", _front_left_encoder.getVelocity())
-      .withPosition(0, 0)
-      .withSize(1, 1);
-    m_tab.add("Back Left", _back_left_encoder.getVelocity())
-      .withPosition(0, 1)
-      .withSize(1, 1);
-    m_tab.add("Front Right", _front_right_encoder.getVelocity())
-      .withPosition(5, 0)
-      .withSize(1, 1);
-    m_tab.add("Back Right", _back_right_encoder.getVelocity())
-      .withPosition(5, 1)
-      .withSize(1, 1);
+    top_left = m_tab.add("top left", getTopLeft())
+    .withPosition(2, 0)
+    .withSize(1,1)
+    .getEntry();
+    top_right = m_tab.add("top right", getTopRight())
+    .withPosition(2, 1)
+    .withSize(1,1)
+    .getEntry();
+    bot_left = m_tab.add("bot left", getBotLeft())
+    .withPosition(2, 2)
+    .withSize(1, 1)
+    .getEntry();
+    bot_right = m_tab.add("bot right", getBotRight())
+    .withPosition(2, 3)
+    .withSize(1, 1)
+    .getEntry();
   }
 
   /**
@@ -151,8 +156,33 @@ public class Drivetrain extends SubsystemBase {
     _drive.stopMotor();
   }
 
+  public void startBackMotor() {
+    _back_motor.set(.1);
+  }
+  public void stopBackMotor() {
+    _back_motor.stopMotor();
+  }
+
+  public double getTopLeft() {
+    return _front_left_encoder.getVelocity();
+  }
+  public double getTopRight() {
+    return _front_right_encoder.getVelocity();
+  }
+  public double getBotLeft() {
+    return _back_left_encoder.getVelocity();
+  }
+  public double getBotRight() {
+    return _back_right_encoder.getVelocity();
+  }
+
+
   @Override
   public void periodic() {
+    bot_left.setNumber(getBotLeft());
+    bot_right.setNumber(getBotRight());
+    top_left.setNumber(getTopLeft());
+    top_right.setNumber(getTopRight());
     //m_tab.addNumber("Encoder Distance", () -> fl_encoder.getDistance());
     //m_tab.addNumber("Encoder Rate", () -> fl_encoder.getRate());
   }
