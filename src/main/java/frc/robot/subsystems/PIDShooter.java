@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -59,6 +60,7 @@ public class PIDShooter extends SubsystemBase {
     _bottom_encoder = _bottom_shooter.getEncoder();
 
     _elevator = new WPI_TalonSRX(ShootConstants.ELEVATOR_PORT);
+    _elevator.setNeutralMode(NeutralMode.Brake);
 
     _bottom_shooter.setInverted(true);
 

@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.BuildConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.Misc;
 
@@ -59,7 +60,7 @@ public class Drivetrain extends SubsystemBase {
   private final SparkMaxPIDController br_pid_controller;
   private final SparkMaxPIDController bl_pid_controller;
 */
-  private double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
+  private boolean reverse = false;
   //Gyro
   //private final AHRS _gyro;
 
@@ -86,6 +87,11 @@ public class Drivetrain extends SubsystemBase {
     k_front_right_location = new Translation2d(1, 1);
     k_back_right_location = new Translation2d(1, 1);
     k_back_left_location = new Translation2d(1, 1);
+
+    _front_left_motor.setInverted(true);
+    _back_left_motor.setInverted(true);
+    _back_right_motor.setInverted(false);
+    _front_right_motor.setInverted(false);
 
     _kinematics = new MecanumDriveKinematics(k_front_left_location, k_front_right_location, k_back_left_location, k_back_right_location);
 
@@ -136,6 +142,11 @@ public class Drivetrain extends SubsystemBase {
    * @param zRot The robot rotation speed values from -1 to 1
    */
   public void cartesianDrive(double ySpeed, double xSpeed, double zRot) {
+    zRot = Math.abs(zRot) < 0.2 ? 0 : zRot;
+    ySpeed = Math.abs(ySpeed) < 0.2 ? 0 : ySpeed;
+    ySpeed = reverse ? -ySpeed : ySpeed;
+    xSpeed = Math.abs(xSpeed) < 0.2 ? 0 : xSpeed;
+    xSpeed = reverse ? -xSpeed : xSpeed;
     _drive.driveCartesian(ySpeed, xSpeed, zRot);
   }
   /**
@@ -149,6 +160,29 @@ public class Drivetrain extends SubsystemBase {
     _drive.driveCartesian(ySpeed, xSpeed, zRot, gyroAngle);
   }
 
+  public void resetEncoders() {
+    _back_left_encoder.setPosition(0);
+    _back_right_encoder.setPosition(0);
+    _front_left_encoder.setPosition(0);
+    _front_right_encoder.setPosition(0);
+  }
+
+  public double getRightDistance() {
+    return (_front_right_encoder.getPosition() + _back_right_encoder.getPosition()) / 2 * BuildConstants.INCHES_PER_REVOLUTION;
+  }
+
+  public double getLeftDistance() {
+    return (_front_left_encoder.getPosition() + _back_left_encoder.getPosition()) / 2 * BuildConstants.INCHES_PER_REVOLUTION;
+  }
+
+  public double getAverage() {
+    return (getRightDistance() + getLeftDistance()) / 2;
+  }
+
+  public void reverseDrive() {
+    reverse = !reverse;
+  }
+
   /**
    * Method to stop driving
    */
@@ -157,7 +191,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void startBackMotor() {
-    _back_motor.set(.1);
+    _back_motor.set(.5);
   }
   public void stopBackMotor() {
     _back_motor.stopMotor();

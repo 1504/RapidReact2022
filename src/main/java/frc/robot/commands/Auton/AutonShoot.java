@@ -26,18 +26,25 @@ public class AutonShoot extends CommandBase {
   public void initialize() {
     _timer.reset();
     _timer.start();
-    _shoot.driveBall();
-    _shoot.rawShoot();
+    _shoot.setTop(1000);
+    _shoot.setBot(5000);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+
+    if (_timer.get() > 2) {
+      _shoot.driveBall();
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     _shoot.stopBall();
+    _shoot.setTop(0);
+    _shoot.setBot(0);
     _shoot.stopShoot();
   }
 

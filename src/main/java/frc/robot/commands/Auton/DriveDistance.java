@@ -11,31 +11,35 @@ public class DriveDistance extends CommandBase {
   
   private final Drivetrain _drive;
   private final double _distance;
-  private double _error;
 
   public DriveDistance(Drivetrain _dr, double _di) {
     _drive = _dr;
     _distance = _di;
-    _error = _di;
-
+    addRequirements(_dr);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    _drive.resetEncoders();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    _drive.cartesianDrive(.5, 0, 0);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    _drive.stopDrive();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Math.abs(_drive.getAverage()) >= _distance;
   }
 }

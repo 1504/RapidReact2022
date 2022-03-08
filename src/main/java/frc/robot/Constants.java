@@ -48,6 +48,12 @@ public final class Constants {
 
         public static final double BOT_CONSTANT = 3.104;
         public static final double TOP_CONSTANT = 3.086;
+    /*
+
+        27 feet - 2200 TOP, 5000 BOT
+
+    */
+    
     }
     public static final class WinchConstants {
         public static final int RIGHT_WINCH = 1;
@@ -59,9 +65,13 @@ public final class Constants {
         public static final double WHEEL_TO_CENTER_SIDE_INCHES = 12.5; //From the side
         public static final double WHEEL_TO_CENTER_FRONT_INCHES = 2.125; //From the front
         public static final double INCHES_TO_METERS = 0.0254;
+        public static final double GR = 12;
+        public static final double WHEEL_CIRCUMFERENCE = 6 * Math.PI;
+        public static final double INCHES_PER_REVOLUTION = WHEEL_CIRCUMFERENCE / GR;
     }
     public static final class Misc {
         public static final int BACK_MOTOR = 41;
     }
+
 
 }

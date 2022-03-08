@@ -19,8 +19,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Winch extends SubsystemBase {
   
-  private final Compressor _compressor;
-  private final Solenoid _solomon;
+  // private final Compressor _compressor;
+  // private final Solenoid _solomon;
 
   private final CANSparkMax _left;
   private final CANSparkMax _right;
@@ -51,13 +51,13 @@ public class Winch extends SubsystemBase {
       .withSize(1,1)
       .getEntry();
     
-    _compressor = new Compressor(PneumaticsModuleType.CTREPCM);
-    _solomon = new Solenoid(PneumaticsModuleType.CTREPCM, WinchConstants.SOLOMON_PORT);
+    // _compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+    // _solomon = new Solenoid(PneumaticsModuleType.CTREPCM, WinchConstants.SOLOMON_PORT);
   }
 
   public void toggleSolenoid() {
     _toggle = !_toggle;
-    _solomon.set(_toggle);
+    // _solomon.set(_toggle);
   }
 
   public boolean direction() {
@@ -104,12 +104,12 @@ public class Winch extends SubsystemBase {
     _right.set(-_s);
   }
   public void extend() {
-    _left.set(.1);
     _left.set(-.1);
+    _right.set(-.1);
   }
 
   public void contract() {
-    _left.set(-.1);
+    _left.set(.1);
     _right.set(.1);
   }
 
