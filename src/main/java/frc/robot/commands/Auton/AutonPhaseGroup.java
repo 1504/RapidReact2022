@@ -22,7 +22,7 @@ public class AutonPhaseGroup extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     System.out.println("Poggers");
     addCommands(
-      new DriveDistance(_drive, 36),
+      new DriveDistance(_drive, 108),
       new AutonShoot(_shoot, 4)
     );
   }

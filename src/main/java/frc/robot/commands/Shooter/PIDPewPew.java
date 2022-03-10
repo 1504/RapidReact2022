@@ -10,17 +10,30 @@ import frc.robot.subsystems.PIDShooter;
 public class PIDPewPew extends CommandBase {
   
   private final PIDShooter _shoot;
+  private final double topRPM;
+  private final double botRPM;
 
-  public PIDPewPew(PIDShooter s) {
+  public PIDPewPew(PIDShooter s, double top, double bot) {
     _shoot = s;
+    topRPM = top;
+    botRPM = bot;
     //addRequirements(s);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    _shoot.setBot();
-    _shoot.setTop();
+    if(botRPM < 0) {
+      _shoot.setBot();
+    } else {
+      _shoot.setBot(botRPM);
+    }
+    if(topRPM < 0) {
+      _shoot.setTop();
+    } else {
+      _shoot.setTop(topRPM);
+    }
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -4,7 +4,10 @@
 
 package frc.robot.commands.Auton;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.PIDShooter;
 
@@ -18,6 +21,7 @@ public class AutonShoot extends CommandBase {
     _timer = new Timer();
     _shoot = _s;
     _time = _t;
+
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -26,8 +30,8 @@ public class AutonShoot extends CommandBase {
   public void initialize() {
     _timer.reset();
     _timer.start();
-    _shoot.setTop(1000);
-    _shoot.setBot(5000);
+    _shoot.setTop(350);
+    _shoot.setBot(5100);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

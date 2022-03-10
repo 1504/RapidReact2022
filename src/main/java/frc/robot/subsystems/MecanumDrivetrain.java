@@ -10,7 +10,8 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.BuildConstants;
-
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
@@ -41,9 +42,16 @@ public class MecanumDrivetrain extends SubsystemBase {
   private final Translation2d _back_right_location;
   private final Translation2d _back_left_location;
 
+  //PIDs
+  private final PIDController _front_left_PID;
+  private final PIDController _front_right_PID;
+  private final PIDController _back_left_PID;
+  private final PIDController _back_right_PID;
+
   private final AHRS _gyro;
   private final MecanumDriveKinematics _kinematics;
   private final MecanumDriveOdometry _odometry;
+  private Pose2d _robot_position;
 
   ShuffleboardTab o_tab = Shuffleboard.getTab("Odometry");
   NetworkTableEntry position;
@@ -68,6 +76,11 @@ public class MecanumDrivetrain extends SubsystemBase {
     _back_right_location = new Translation2d(-BuildConstants.WHEEL_TO_CENTER_SIDE_INCHES * BuildConstants.INCHES_TO_METERS, 
                                              -BuildConstants.WHEEL_TO_CENTER_FRONT_INCHES * BuildConstants.INCHES_TO_METERS);
   
+    _front_left_PID = new PIDController(0, 0, 0);
+    _front_right_PID = new PIDController(0, 0, 0);
+    _back_left_PID = new PIDController(0, 0, 0);
+    _back_right_PID = new PIDController(0, 0, 0);
+
     _kinematics = new MecanumDriveKinematics(_front_left_location, 
                                               _front_right_location, 
                                               _back_left_location, 
@@ -78,23 +91,35 @@ public class MecanumDrivetrain extends SubsystemBase {
     _odometry = new MecanumDriveOdometry(_kinematics, _gyro.getRotation2d());
     _gyro.reset();
   
+    position = o_tab.add("Position", _robot_position)
+      .withPosition(0, 0)
+      .getEntry();
   }
 
   public MecanumDriveWheelSpeeds getCurrentState() {
     return new MecanumDriveWheelSpeeds(
-      _front_left_encoder.getVelocity(),
-      _front_right_encoder.getVelocity(),
-      _back_left_encoder.getVelocity(),
-      _back_right_encoder.getVelocity()
+      _front_left_encoder.getVelocity() / BuildConstants.GR * BuildConstants.WHEEL_CIRCUMFERENCE,
+      _front_right_encoder.getVelocity() / BuildConstants.GR * BuildConstants.WHEEL_CIRCUMFERENCE,
+      _back_left_encoder.getVelocity() / BuildConstants.GR * BuildConstants.WHEEL_CIRCUMFERENCE,
+      _back_right_encoder.getVelocity() / BuildConstants.GR * BuildConstants.WHEEL_CIRCUMFERENCE
     );
   }
 
-  public void updateOdometry() {
-    _odometry.update(_gyro.getRotation2d(), getCurrentState());
+  public void setSpeeds(MecanumDriveWheelSpeeds speeds) {
+    double fl = _front_left_PID.calculate(0);
+    double fr;
+    double bl;
+    double br;
+  }
+
+  public Pose2d updateOdometry() {
+
+    return _odometry.update(_gyro.getRotation2d(), getCurrentState());
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    _robot_position = updateOdometry();
+    position.setValue(_robot_position);
   }
 }

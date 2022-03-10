@@ -35,6 +35,7 @@ public class PIDShooter extends SubsystemBase {
   private final WPI_TalonSRX _elevator;
 
   ShuffleboardTab s_tab = Shuffleboard.getTab("Shooter");
+  ShuffleboardTab m_tab = Shuffleboard.getTab("Main");
   NetworkTableEntry rpmTop;
   NetworkTableEntry rpmTopText;
   NetworkTableEntry rpmBot;
@@ -99,9 +100,18 @@ public class PIDShooter extends SubsystemBase {
     s_tab.add("Top PID", _PID_top)
       .withPosition(0, 0)
       .withSize(1,2);
+
+    m_tab.add("Top PID", _PID_top)
+      .withPosition(0, 3)
+      .withSize(1, 1);
+
     s_tab.add("Bottom PID", _PID_bot)
       .withPosition(4, 0)
-      .withSize(1,2);
+      .withSize(1,1);
+
+    m_tab.add("Bottom PID", _PID_bot)
+      .withPosition(4, 1)
+      .withSize(1, 1);
 
 
   }

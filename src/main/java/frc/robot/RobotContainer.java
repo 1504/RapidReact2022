@@ -4,13 +4,18 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.IOConstants;
 import frc.robot.Constants.ShootConstants;
 import frc.robot.commands.Auton.AutonPhaseGroup;
 import frc.robot.commands.Drive.Cartesian;
+import frc.robot.commands.Drive.ReverseDrive;
 import frc.robot.commands.Misc.DriveBack;
 import frc.robot.commands.Shooter.DriveBall;
 import frc.robot.commands.Shooter.PIDPewPew;
@@ -43,8 +48,15 @@ public class RobotContainer {
   //private final Joystick _shooter = new Joystick(3);
   private final XboxController _shootController = new XboxController(IOConstants.SHOOT_CONTROLLER);
 
-  
+  UsbCamera _cam = CameraServer.startAutomaticCapture();
+  ShuffleboardTab m_tab = Shuffleboard.getTab("Main");
+
   public RobotContainer() {
+
+    _cam.setResolution(360, 240);
+    m_tab.add("Cam", _cam)
+      .withPosition(0, 0)
+      .withSize(3, 3);
 
     configureButtonBindings();
     m_drive.setDefaultCommand(new Cartesian(m_drive, () -> _joystickOne.getY(),() -> _joystickOne.getX(), () -> -_joystickTwo.getX()));
@@ -61,11 +73,13 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //new JoystickButton(_shootController, XboxController.Button.kX.value).whenHeld(new PewPew(m_shoot));
-    new JoystickButton(_shootController, XboxController.Button.kX.value).whenHeld(new PIDPewPew(p_shoot));
+    new JoystickButton(_shootController, XboxController.Button.kX.value).whenHeld(new PIDPewPew(p_shoot, -1, -1));
     new JoystickButton(_shootController, XboxController.Button.kY.value).whenHeld(new DriveBall(p_shoot));
     new JoystickButton(_shootController, XboxController.Button.kA.value).whenHeld(new WinchPull(m_winch));
     new JoystickButton(_shootController, XboxController.Button.kB.value).whenHeld(new WinchPush(m_winch));
+    //new JoystickButton(_shootController, XboxController.Button.kB.value).whenHeld(new PIDPewPew(p_shoot, 1000, 3000));
     new JoystickButton(_shootController, XboxController.Button.kBack.value).whenHeld(new DriveBack(m_drive));
+    new JoystickButton(_joystickOne, 1).whenHeld(new ReverseDrive(m_drive));
     new JoystickButton(_shootController, XboxController.Button.kStart.value).whenPressed(new ToggleSolomon(m_winch));
   }
 

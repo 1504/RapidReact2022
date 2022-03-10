@@ -66,10 +66,6 @@ public class Drivetrain extends SubsystemBase {
 
   //Shuffleboard tab
   ShuffleboardTab m_tab = Shuffleboard.getTab("Main");
-  NetworkTableEntry top_left;
-  NetworkTableEntry top_right;
-  NetworkTableEntry bot_left;
-  NetworkTableEntry bot_right;
 
 
   public Drivetrain() {
@@ -100,6 +96,8 @@ public class Drivetrain extends SubsystemBase {
     _front_right_encoder = _front_right_motor.getEncoder();
     _back_left_encoder = _back_left_motor.getEncoder();
     _back_right_encoder = _back_right_motor.getEncoder();
+
+    //_front_left_encoder.setPositionConversionFactor(BuildConstants.INCHES_PER_REVOLUTION);
     
 
     //_gyro = new AHRS(SPI.Port.kMXP);
@@ -116,23 +114,6 @@ public class Drivetrain extends SubsystemBase {
     br_pid_controller.setFeedbackDevice(_back_right_encoder);
     */
 
-    //Shuffleboard stuff
-    top_left = m_tab.add("top left", getTopLeft())
-    .withPosition(2, 0)
-    .withSize(1,1)
-    .getEntry();
-    top_right = m_tab.add("top right", getTopRight())
-    .withPosition(2, 1)
-    .withSize(1,1)
-    .getEntry();
-    bot_left = m_tab.add("bot left", getBotLeft())
-    .withPosition(2, 2)
-    .withSize(1, 1)
-    .getEntry();
-    bot_right = m_tab.add("bot right", getBotRight())
-    .withPosition(2, 3)
-    .withSize(1, 1)
-    .getEntry();
   }
 
   /**
@@ -213,10 +194,6 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    bot_left.setNumber(getBotLeft());
-    bot_right.setNumber(getBotRight());
-    top_left.setNumber(getTopLeft());
-    top_right.setNumber(getTopRight());
     //m_tab.addNumber("Encoder Distance", () -> fl_encoder.getDistance());
     //m_tab.addNumber("Encoder Rate", () -> fl_encoder.getRate());
   }
