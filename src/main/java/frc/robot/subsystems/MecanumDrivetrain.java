@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.BuildConstants;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
@@ -48,6 +49,9 @@ public class MecanumDrivetrain extends SubsystemBase {
   private final PIDController _back_left_PID;
   private final PIDController _back_right_PID;
 
+  //Feed Forward
+  private final SimpleMotorFeedforward _feedforward;
+
   private final AHRS _gyro;
   private final MecanumDriveKinematics _kinematics;
   private final MecanumDriveOdometry _odometry;
@@ -81,6 +85,8 @@ public class MecanumDrivetrain extends SubsystemBase {
     _back_left_PID = new PIDController(0, 0, 0);
     _back_right_PID = new PIDController(0, 0, 0);
 
+    _feedforward = new SimpleMotorFeedforward(0, 0);
+
     _kinematics = new MecanumDriveKinematics(_front_left_location, 
                                               _front_right_location, 
                                               _back_left_location, 
@@ -106,15 +112,54 @@ public class MecanumDrivetrain extends SubsystemBase {
   }
 
   public void setSpeeds(MecanumDriveWheelSpeeds speeds) {
-    double fl = _front_left_PID.calculate(0);
-    double fr;
-    double bl;
-    double br;
+    double flff = _feedforward.calculate(speeds.frontLeftMetersPerSecond);
+    double frff = _feedforward.calculate(speeds.frontRightMetersPerSecond);
+    double blff = _feedforward.calculate(speeds.rearLeftMetersPerSecond);
+    double brff = _feedforward.calculate(speeds.rearRightMetersPerSecond);
+
+    double fl = _front_left_PID.calculate(
+      _front_left_encoder.getVelocity(), speeds.frontLeftMetersPerSecond
+    );
+    double fr = _front_right_PID.calculate(
+      _front_right_encoder.getVelocity(), speeds.frontRightMetersPerSecond
+    );
+    double bl = _back_left_PID.calculate(
+      _back_left_encoder.getVelocity(), speeds.rearLeftMetersPerSecond
+    );
+    double br = _back_right_PID.calculate(
+      _back_right_encoder.getVelocity(), speeds.rearRightMetersPerSecond
+    );
+
+    
   }
 
   public Pose2d updateOdometry() {
 
     return _odometry.update(_gyro.getRotation2d(), getCurrentState());
+  }
+
+  public Pose2d getPose() {
+    return _odometry.getPoseMeters();
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    _odometry.resetPosition(pose, _gyro.getRotation2d());
+  }
+
+  public double getHeading() {
+    return _gyro.getRotation2d().getDegrees();
+  }
+
+  public double getTurnRate() {
+    return -_gyro.getRate();
+  }
+
+  public MecanumDriveKinematics getKinematics() {
+    return _kinematics;
+  }
+
+  public SimpleMotorFeedforward getFeedForward() {
+    return _feedforward;
   }
 
   @Override

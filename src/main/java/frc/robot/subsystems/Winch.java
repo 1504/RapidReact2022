@@ -39,6 +39,9 @@ public class Winch extends SubsystemBase {
     _left = new CANSparkMax(WinchConstants.LEFT_WINCH, MotorType.kBrushless);
     _right = new CANSparkMax(WinchConstants.RIGHT_WINCH, MotorType.kBrushless);
 
+    _left.setInverted(true);
+    _right.setInverted(true);
+
     _left_encoder = _left.getEncoder();
     _right_encoder = _right.getEncoder();
 
@@ -104,13 +107,13 @@ public class Winch extends SubsystemBase {
     _right.set(-_s);
   }
   public void extend() {
-    _left.set(-.1);
-    _right.set(-.1);
+    _left.set(-1);
+    _right.set(-1);
   }
 
   public void contract() {
-    _left.set(.1);
-    _right.set(.1);
+    _left.set(.4);
+    _right.set(.4);
   }
 
   public void stopMotors() {

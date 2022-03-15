@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.BuildConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.Misc;
+import frc.robot.Pathing.PathChooser;
 
 public class Drivetrain extends SubsystemBase {
   
@@ -128,6 +129,9 @@ public class Drivetrain extends SubsystemBase {
     ySpeed = reverse ? -ySpeed : ySpeed;
     xSpeed = Math.abs(xSpeed) < 0.2 ? 0 : xSpeed;
     xSpeed = reverse ? -xSpeed : xSpeed;
+
+    
+
     _drive.driveCartesian(ySpeed, xSpeed, zRot);
   }
   /**

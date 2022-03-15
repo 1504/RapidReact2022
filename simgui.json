@@ -6,7 +6,12 @@
       "/LiveWindow/Shooter": "Subsystem",
       "/LiveWindow/Ungrouped/MecanumDrive[1]": "MecanumDrive",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
-      "/Shuffleboard/Main/Drive": "MecanumDrive"
+      "/Shuffleboard/Auton/Auton Pathing": "String Chooser",
+      "/Shuffleboard/Main/Bottom PID": "PIDController",
+      "/Shuffleboard/Main/Drive": "MecanumDrive",
+      "/Shuffleboard/Main/Top PID": "PIDController",
+      "/Shuffleboard/Shooter/Bottom PID": "PIDController",
+      "/Shuffleboard/Shooter/Top PID": "PIDController"
     }
   }
 }

@@ -23,12 +23,12 @@ public class PIDPewPew extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(botRPM < 0) {
+    if(botRPM == -1) {
       _shoot.setBot();
     } else {
       _shoot.setBot(botRPM);
     }
-    if(topRPM < 0) {
+    if(topRPM == -1) {
       _shoot.setTop();
     } else {
       _shoot.setTop(topRPM);
